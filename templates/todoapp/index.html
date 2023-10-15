@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ title }}</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+</head>
+<body>
+    <div>
+        <h1>Мой менеджер задач</h1>
+        <h3>Управляй своим временем!</h3>
+        <form action="{% url 'add' %}" method="post">
+            {% csrf_token %}
+            <div>
+                <label>Новая задача</label>
+                <input type="text" name="title" placeholder="Введите название задачи"><br>
+            </div>
+            <button type="submit">Добавить</button>
+        </form>
+
+        {% for todo in todo_list %}
+            <div>
+                <p>№{{ todo.id }} {{ todo.title }}</p>
+                {% if todo.is_complete == False %}
+                    <span>Не завершено</span>
+                    <a href="{% url 'update' todo_id=todo.id %}">Закрыть</a>
+                {% else %}
+                    <span>Завершено</span>
+                    <a href="{% url 'update' todo_id=todo.id %}">Открыть</a>
+                {% endif %}
+                <a href="{% url 'delete' todo_id=todo.id %}">Удалить</a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
